@@ -6,15 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            /*background-color: rgb(18, 18, 18);*/
+            /* background-color: #242424; */
+            background-color: #121212;
+        }
+    </style>
 </head>
 
 <body>
     <div id='p'></div>
     <script>
-        let barClicked = false;
+        // Chart 2 is "Crime Count Per Type in [District]"
+        let show_chart_2 = false;
+
+        // Store's a district bar (from chart 1) data
         let clickedPoint = null;
         let district = null;
-        let crimeCount = null;
 
         const districts = ['A1', 'A15', 'A7', 'B2', 'B3', 'C11', 'C6', 'D14', 'D4', 'E13', 'E18', 'E5'];
 
@@ -37,38 +46,59 @@
 
         let crimeByCount_y = [];
 
+        // Stores each districts total crime count for chart 1's y value
         for (let i = 0; i < districts.length; i++) {
             crimeByCount_y.push(districtToCount[districts[i]]);
         }
 
+        // Chart 1: Total Crime Per District
         let crimeByCount = {
             x: districts,
             y: crimeByCount_y,
             name: 'Total Crime Per District',
-            type: 'bar' // https://plotly.com/javascript/bar-charts/
+            type: 'bar', // https://plotly.com/javascript/bar-charts/
+            marker: {
+                //color: 'rgb(255, 99, 132)',
+                color: "#bc5090",
+                opacity: 1,
+                line: {
+                    color: "#bc5090",
+                    //color: "#ff6361",
+                    width: 1.5,
+                }
+            },
         };
 
         const crimeByCount_layout = {
-            xaxis: { title: 'District'},
-            yaxis: { title: 'Count' },
-            title: 'Total Crime Per District',
+            xaxis: { title: 'District' },
+            yaxis: { title: { text: 'Count', standoff: 7 }, gridcolor: 'rgba(255,255,255,0.2)'},
+            title: { text: 'Total Crime Per District', font: { size: 24 } },
+            paper_bgcolor: "#121212",
+            plot_bgcolor: "rgba(0, 0, 0, 0)",
+            font: {
+                color: "rgba(255, 255, 255, 0.9)"
+            },
+            margin: {l : 90}
         };
 
         const graphDiv = document.getElementById('p');
-        
-        Plotly.newPlot(graphDiv, [crimeByCount], crimeByCount_layout);
 
+        // Initial graph is chart 1 (total crime per district)
+        Plotly.newPlot(graphDiv, [crimeByCount], crimeByCount_layout, { responsive: true, displayModeBar: false });
+
+
+        // Switches between chart 1 and chart 2 when a bar is clicked
         graphDiv.on('plotly_click', function (data) {
             clickedPoint = data.points[0];
             district = clickedPoint.x;
-            crimeCount = clickedPoint.y;
-            barClicked = !barClicked;
-            console.log("Bar Clicked: ", barClicked);
+            show_chart_2 = !show_chart_2;
+
             updateGraph();
         });
 
         function updateGraph() {
-            if (barClicked === true) {
+            // Change chart 1 to chart 2
+            if (show_chart_2 === true) {
                 crimeByType_x = [];
 
                 for (const key in districtToType[district]) {
@@ -81,21 +111,40 @@
                     crimeByType_y.push(districtToType[district][key]);
                 }
 
+                // Chart 2: Total Crime Per Type in [District]
                 crimeByType = {
                     x: crimeByType_x,
                     y: crimeByType_y,
                     name: 'Total Crime Per Type Per District',
-                    type: 'bar' // https://plotly.com/javascript/bar-charts/
+                    type: 'bar', // https://plotly.com/javascript/bar-charts/
+                    marker: {
+                        color: 'rgb(177, 167, 254)',
+                        opacity: 0.9,
+                        // line: {
+                        //     color: 'black',
+                        //     width: 1.5
+                        // }
+                    }
                 };
 
                 crimeByType_layout = {
                     xaxis: { title: 'Type (hover bar for details)', showticklabels: false },
-                    yaxis: { title: 'Count' },
-                    title:'Crime Count Per Type in ' + district,
+                    yaxis: { title: { text: 'Count', standoff: 7 }, gridcolor: 'rgba(255,255,255,0.2)' },
+                    title: { text: 'Crime Count Per Type in ' + district, font: { size: 24 } },
+                    paper_bgcolor: "#121212",
+                    plot_bgcolor: "rgba(0, 0, 0, 0)",
+                    font: {
+                        color: "rgba(255, 255, 255, 0.9)"
+                    },
+                    margin: {l : 90}
                 };
-                Plotly.react(graphDiv, [crimeByType], crimeByType_layout);
+
+                // React updates the already existing graph instead of making
+                // a new one. Without react, the graph isn't updated properly
+                Plotly.react(graphDiv, [crimeByType], crimeByType_layout, { responsive: true, displayModeBar: false });
             } else {
-                Plotly.react(graphDiv, [crimeByCount], crimeByCount_layout);
+                // Change chart 2 to chart 1
+                Plotly.react(graphDiv, [crimeByCount], crimeByCount_layout, { responsive: true, displayModeBar: false });
             }
         }
     </script>
