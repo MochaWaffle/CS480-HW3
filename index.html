@@ -49,13 +49,9 @@
         };
 
         const crimeByCount_layout = {
-            xaxis: { title: 'District', automargin: true },
+            xaxis: { title: 'District'},
             yaxis: { title: 'Count' },
             title: 'Total Crime Per District',
-            height: 600,
-            margin: {
-                b: 150,
-            }
         };
 
         const graphDiv = document.getElementById('p');
@@ -93,13 +89,9 @@
                 };
 
                 crimeByType_layout = {
-                    xaxis: { title: 'Type', automargin: true },
+                    xaxis: { title: 'Type (hover bar for details)', showticklabels: false },
                     yaxis: { title: 'Count' },
                     title:'Crime Count Per Type in ' + district,
-                    height: 3500,
-                    margin: {
-                        b: 3000
-                    }
                 };
                 Plotly.react(graphDiv, [crimeByType], crimeByType_layout);
             } else {
