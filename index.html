@@ -4,19 +4,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>CS 480 - HW3</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <style>
         body {
-            /*background-color: rgb(18, 18, 18);*/
-            /* background-color: #242424; */
             background-color: #121212;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        #p {
+            width: 100%;
+            height: 450px;
+        }
+
+        #sources {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            /* height: 100%; */
         }
     </style>
 </head>
 
 <body>
     <div id='p'></div>
+    <div id="sources">
+        <p> Data Source: <a
+                href="https://data.boston.gov/api/3/action/datastore_search_sql?sql=%0ASELECT%20%22DISTRICT%22%2C%0A%20%20%20%20%20%20%20%22OCCURRED_ON_DATE%22%2C%0A%20%20%20%20%20%20%20%22SHOOTING%22%2C%0A%20%20%20%20%20%20%20%22OFFENSE_DESCRIPTION%22%0AFROM%20%22b973d8cb-eeb2-4e7e-99da-c92938efc9c0%22%0A"
+                target="_blank"> Analyze Boston API</a></p>
+        <p> Inspired By: <a href="https://graphy.app/graphs/interactive-graph-maker"
+                target="_blank">https://graphy.app/graphs/interactive-graph-maker</a></p>
+        <p> Inspired By: <a href="https://360.articulate.com/review/content/bc8d24e0-a6db-4276-ba7a-14211897f84f/review"
+                target="_blank">https://360.articulate.com/review/content/bc8d24e0-a6db-4276-ba7a-14211897f84f/review</a>
+        </p>
+    </div>
     <script>
         // Chart 2 is "Crime Count Per Type in [District]"
         let show_chart_2 = false;
@@ -52,33 +74,27 @@
         }
 
         // Chart 1: Total Crime Per District
-        let crimeByCount = {
+        const crimeByCount = {
             x: districts,
             y: crimeByCount_y,
             name: 'Total Crime Per District',
             type: 'bar', // https://plotly.com/javascript/bar-charts/
             marker: {
-                //color: 'rgb(255, 99, 132)',
                 color: "#bc5090",
                 opacity: 1,
-                line: {
-                    color: "#bc5090",
-                    //color: "#ff6361",
-                    width: 1.5,
-                }
             },
         };
 
         const crimeByCount_layout = {
             xaxis: { title: 'District' },
-            yaxis: { title: { text: 'Count', standoff: 7 }, gridcolor: 'rgba(255,255,255,0.2)'},
+            yaxis: { title: { text: 'Count', standoff: 7 }, gridcolor: 'rgba(255,255,255,0.2)' },
             title: { text: 'Total Crime Per District', font: { size: 24 } },
             paper_bgcolor: "#121212",
             plot_bgcolor: "rgba(0, 0, 0, 0)",
             font: {
                 color: "rgba(255, 255, 255, 0.9)"
             },
-            margin: {l : 90}
+            margin: { l: 90 }
         };
 
         const graphDiv = document.getElementById('p');
@@ -99,20 +115,20 @@
         function updateGraph() {
             // Change chart 1 to chart 2
             if (show_chart_2 === true) {
-                crimeByType_x = [];
+                let crimeByType_x = [];
 
                 for (const key in districtToType[district]) {
                     crimeByType_x.push(key);
                 }
 
-                crimeByType_y = [];
+                let crimeByType_y = [];
 
                 for (const key in districtToType[district]) {
                     crimeByType_y.push(districtToType[district][key]);
                 }
 
                 // Chart 2: Total Crime Per Type in [District]
-                crimeByType = {
+                const crimeByType = {
                     x: crimeByType_x,
                     y: crimeByType_y,
                     name: 'Total Crime Per Type Per District',
@@ -120,14 +136,10 @@
                     marker: {
                         color: 'rgb(177, 167, 254)',
                         opacity: 0.9,
-                        // line: {
-                        //     color: 'black',
-                        //     width: 1.5
-                        // }
                     }
                 };
 
-                crimeByType_layout = {
+                const crimeByType_layout = {
                     xaxis: { title: 'Type (hover bar for details)', showticklabels: false },
                     yaxis: { title: { text: 'Count', standoff: 7 }, gridcolor: 'rgba(255,255,255,0.2)' },
                     title: { text: 'Crime Count Per Type in ' + district, font: { size: 24 } },
@@ -136,7 +148,7 @@
                     font: {
                         color: "rgba(255, 255, 255, 0.9)"
                     },
-                    margin: {l : 90}
+                    margin: { l: 90 }
                 };
 
                 // React updates the already existing graph instead of making
