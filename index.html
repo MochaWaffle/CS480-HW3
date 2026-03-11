@@ -30,13 +30,13 @@
 <body>
     <div id='p'></div>
     <div id="sources">
-        <p id="instruction"> Instruction: Click on a bar to see chart 2 of crime types in that district.</p>
-        <p> Data Source: <a
+        <p> <span style="color: lightgreen">Instruction:</span> <span id="instruction">Click on a bar to see chart 2 of crime types in that district.</span></p>
+        <p> <span style="color: skyblue">Data Source: </span><a
                 href="https://data.boston.gov/api/3/action/datastore_search_sql?sql=%0ASELECT%20%22DISTRICT%22%2C%0A%20%20%20%20%20%20%20%22OCCURRED_ON_DATE%22%2C%0A%20%20%20%20%20%20%20%22SHOOTING%22%2C%0A%20%20%20%20%20%20%20%22OFFENSE_DESCRIPTION%22%0AFROM%20%22b973d8cb-eeb2-4e7e-99da-c92938efc9c0%22%0A"
                 target="_blank"> Analyze Boston API</a></p>
-        <p> Inspired By: <a href="https://graphy.app/graphs/interactive-graph-maker"
+        <p> <span style="color: red">Inspired By: </span><a href="https://graphy.app/graphs/interactive-graph-maker"
                 target="_blank">https://graphy.app/graphs/interactive-graph-maker</a></p>
-        <p> Inspired By: <a href="https://360.articulate.com/review/content/bc8d24e0-a6db-4276-ba7a-14211897f84f/review"
+        <p> <span style="color: red">Inspired By: </span><a href="https://360.articulate.com/review/content/bc8d24e0-a6db-4276-ba7a-14211897f84f/review"
                 target="_blank">https://360.articulate.com/review/content/bc8d24e0-a6db-4276-ba7a-14211897f84f/review</a>
         </p>
     </div>
@@ -116,7 +116,7 @@
         function updateGraph() {
             // Change chart 1 to chart 2
             if (show_chart_2 === true) {
-                document.getElementById("instruction").innerText = "Instruction: Click on any bars to back to chart 1.";
+                document.getElementById("instruction").innerText = "Click on any bars to go back to chart 1.";
                 let crimeByType_x = [];
 
                 for (const key in districtToType[district]) {
@@ -158,7 +158,7 @@
                 Plotly.react(graphDiv, [crimeByType], crimeByType_layout, { responsive: true, displayModeBar: false });
             } else {
                 // Change chart 2 to chart 1
-                document.getElementById("instruction").innerText = "Instruction: Click on a bar to see chart 2 of crime types in that district.";
+                document.getElementById("instruction").innerText = "Click on a bar to see chart 2 of crime types in that district.";
                 Plotly.react(graphDiv, [crimeByCount], crimeByCount_layout, { responsive: true, displayModeBar: false });
             }
         }
