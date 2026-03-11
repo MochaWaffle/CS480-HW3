@@ -30,6 +30,7 @@
 <body>
     <div id='p'></div>
     <div id="sources">
+        <p id="instruction"> Instruction: Click on a bar to see chart 2 of crime types in that district.</p>
         <p> Data Source: <a
                 href="https://data.boston.gov/api/3/action/datastore_search_sql?sql=%0ASELECT%20%22DISTRICT%22%2C%0A%20%20%20%20%20%20%20%22OCCURRED_ON_DATE%22%2C%0A%20%20%20%20%20%20%20%22SHOOTING%22%2C%0A%20%20%20%20%20%20%20%22OFFENSE_DESCRIPTION%22%0AFROM%20%22b973d8cb-eeb2-4e7e-99da-c92938efc9c0%22%0A"
                 target="_blank"> Analyze Boston API</a></p>
@@ -115,6 +116,7 @@
         function updateGraph() {
             // Change chart 1 to chart 2
             if (show_chart_2 === true) {
+                document.getElementById("instruction").innerText = "Instruction: Click on any bars to back to chart 1.";
                 let crimeByType_x = [];
 
                 for (const key in districtToType[district]) {
@@ -156,6 +158,7 @@
                 Plotly.react(graphDiv, [crimeByType], crimeByType_layout, { responsive: true, displayModeBar: false });
             } else {
                 // Change chart 2 to chart 1
+                document.getElementById("instruction").innerText = "Instruction: Click on a bar to see chart 2 of crime types in that district.";
                 Plotly.react(graphDiv, [crimeByCount], crimeByCount_layout, { responsive: true, displayModeBar: false });
             }
         }
